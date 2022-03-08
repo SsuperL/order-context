@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+option go_package="./;pl";
+package order;
+import "google/protobuf/timestamp.proto";
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest)returns(CreateOrderReply){}
+}
+// 创建订单请求参数
+message CreateOrderRequest{
+    // 订单状态
+    string status = 1;
+    // 订单价格
+    float price = 2;
+    // 套餐版本
+    string package_version = 3;
+    // 套餐价格
+    float package_price = 4;
+    // 空间ID
+    string space_id = 5;
+    string site_code = 6;
+}
+
+// 订单状态
+enum OrderStatus {
+    // 未支付
+    UNPAID =0;
+    // 已支付
+    PAID =1;
+    // 已取消
+    CANCELLED=2;
+    // 已失效
+    FAILED=3;
+}
+
+// 更新订单请求参数
+message UpdateOrderRequest{
+    // 订单id
+    string id = 1;
+    // 订单状态
+    OrderStatus status = 2;
+    string site_code = 3;
+}
+
+// 获取订单详情请求参数
+message GetOrderDetailRequest {
+    // 订单id
+    string id = 1;
+    string site_code = 2;
+}
+
+// 获取订单列表请求参数
+message GetOrderListRequest {
+    // 空间id
+    string space_id = 1;
+    // 订单状态
+    OrderStatus status = 2;
+    int32 limit = 3;
+    int32 offset = 4;
+}
+
+// 创建订单响应
+message CreateOrderReply{
+    string id = 1;
+}
+
+// 更新订单响应
+message UpdateOrderReply{
+    bool success = 1;
+}
+
+// 获取订单详情响应
+message GetOrderDetailReply{
+    string id = 1;
+    OrderStatus status = 2;
+    string number = 3;
+    string space_id = 4;
+    string pay_id = 5;
+    float price = 6;
+    string package_version = 7;
+    float package_price = 8;
+    string site_code = 9;
+    google.protobuf.Timestamp created_at = 10;
+    google.protobuf.Timestamp updated_at = 11;
+}
+
+// 获取订单列表响应
+message GetOrderListReply {
+
+}

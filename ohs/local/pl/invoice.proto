@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package="./;pl";
+package order;
+
+enum InvoiceStatus {
+    INVOICED = 0;
+    UNINVOICED = 1;
+}
+
+message CreateInvoiceRequest{
+    // 订单id
+    string order_id = 1;
+    // 发票状态
+    InvoiceStatus status = 2;
+    // 发票保存路径
+    string path = 3;
+    // 发票抬头
+    string name = 4;
+    // 订单价格
+    float price = 5;
+}
+
+message UpdateInvoiceRequest{
+
+}
+
+message GetInvoiceDetailRequest{
+
+}
+
+message GetInvoiceListRequest{
+
+}
