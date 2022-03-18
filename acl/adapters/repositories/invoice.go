@@ -5,6 +5,7 @@ import (
 	"order-service/acl/ports/repositories"
 	"order-service/common"
 	"order-service/domain/aggregate"
+	ohs_pl "order-service/ohs/local/pl"
 	"sync"
 	"time"
 
@@ -67,20 +68,20 @@ func (a *InvoiceAdapter) GetInvoiceDetail(invoiceID, siteCode string) (pl.Invoic
 }
 
 // GetInvoiceList 获取发票列表
-func (a *InvoiceAdapter) GetInvoiceList(params common.ListInvoiceParams) ([]pl.Invoice, error) {
+func (a *InvoiceAdapter) GetInvoiceList(params ohs_pl.ListInvoiceParams) ([]pl.Invoice, int, error) {
 	filter := a.db.Table("invoices").Where("order_id = ?", params.OrderID)
 	if params.Status != 0 {
 		filter = filter.Where("status = ?", params.Status)
 	}
 	var total int64
 	if err := filter.Count(&total).Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	var invoices []pl.Invoice
 	if err := filter.Limit(params.Limit).Offset(params.Offset).Find(&invoices).Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return invoices, nil
+	return invoices, int(total), nil
 }
 
 // CheckInvoiceExists 检查发票是否存在
@@ -93,7 +94,7 @@ func (a *InvoiceAdapter) CheckInvoiceExists(invoiceID, siteCode string) error {
 }
 
 // UpdateInvoice 更新发票
-func (a *InvoiceAdapter) UpdateInvoice(invoiceID, siteCode string, params common.UpdateInvoiceParams) error {
+func (a *InvoiceAdapter) UpdateInvoice(invoiceID, siteCode string, params ohs_pl.UpdateInvoiceParams) error {
 	updateParam := make(map[string]interface{})
 	if params.Status != 0 {
 		updateParam["status"] = params.Status

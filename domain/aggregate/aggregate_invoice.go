@@ -16,23 +16,35 @@ type InvoiceAggregate struct {
 	Order vo.Order
 }
 
-// NewInvoiceAggregate 发票聚合构造函数
-func NewInvoiceAggregate(RootID, id, name, code, path string, status common.InvoiceStatusType, price float64) *InvoiceAggregate {
-	return &InvoiceAggregate{
-		RootID: id,
-		Invoice: &entity.Invoice{
-			ID:     id,
-			Status: status,
-			Path:   path,
-			Detail: vo.InvoiceDetail{
-				Name: name,
-				Code: code,
-			},
-		},
-		Order: vo.Order{
-			Price: price,
-		},
+// InvoiceOptions ...
+type InvoiceOptions func(*InvoiceAggregate)
+
+// WithInvoiceOption init invoice aggregate with invoice params
+func WithInvoiceOption(status common.InvoiceStatusType, path, name string) InvoiceOptions {
+	return func(i *InvoiceAggregate) {
+		i.Invoice.Status = status
+		i.Invoice.Path = path
+		i.Invoice.Detail.Name = name
 	}
+}
+
+// WithOrderOptionForInvoice init invoice aggregate with order params
+func WithOrderOptionForInvoice(price float32) InvoiceOptions {
+	return func(i *InvoiceAggregate) {
+		i.Order.Price = price
+	}
+}
+
+// NewInvoiceAggregate 发票聚合构造函数
+func NewInvoiceAggregate(rootID, id string, options ...InvoiceOptions) *InvoiceAggregate {
+	invoiceAg := &InvoiceAggregate{
+		RootID:  rootID,
+		Invoice: &entity.Invoice{},
+	}
+	for _, option := range options {
+		option(invoiceAg)
+	}
+	return invoiceAg
 }
 
 // SetID 设置发票id

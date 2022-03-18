@@ -9,5 +9,5 @@ type Payment struct {
 	// 币种
 	Currency string
 	// 金额
-	Total float64
+	Total float32
 }

@@ -6,8 +6,8 @@ package mock
 
 import (
 	pl "order-service/acl/adapters/pl"
-	common "order-service/common"
 	aggregate "order-service/domain/aggregate"
+	pl0 "order-service/ohs/local/pl"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -37,17 +37,17 @@ func (m *MockInvoiceRepository) EXPECT() *MockInvoiceRepositoryMockRecorder {
 }
 
 // CheckInvoiceExists mocks base method.
-func (m *MockInvoiceRepository) CheckInvoiceExists(invoiceId, siteCode string) error {
+func (m *MockInvoiceRepository) CheckInvoiceExists(invoiceID, siteCode string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CheckInvoiceExists", invoiceId, siteCode)
+	ret := m.ctrl.Call(m, "CheckInvoiceExists", invoiceID, siteCode)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CheckInvoiceExists indicates an expected call of CheckInvoiceExists.
-func (mr *MockInvoiceRepositoryMockRecorder) CheckInvoiceExists(invoiceId, siteCode interface{}) *gomock.Call {
+func (mr *MockInvoiceRepositoryMockRecorder) CheckInvoiceExists(invoiceID, siteCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckInvoiceExists", reflect.TypeOf((*MockInvoiceRepository)(nil).CheckInvoiceExists), invoiceId, siteCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckInvoiceExists", reflect.TypeOf((*MockInvoiceRepository)(nil).CheckInvoiceExists), invoiceID, siteCode)
 }
 
 // CreateInvoice mocks base method.
@@ -64,42 +64,29 @@ func (mr *MockInvoiceRepositoryMockRecorder) CreateInvoice(arg0, arg1 interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateInvoice", reflect.TypeOf((*MockInvoiceRepository)(nil).CreateInvoice), arg0, arg1)
 }
 
-// DeleteInvoice mocks base method.
-func (m *MockInvoiceRepository) DeleteInvoice(invoiceId, siteCode string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteInvoice", invoiceId, siteCode)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// DeleteInvoice indicates an expected call of DeleteInvoice.
-func (mr *MockInvoiceRepositoryMockRecorder) DeleteInvoice(invoiceId, siteCode interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteInvoice", reflect.TypeOf((*MockInvoiceRepository)(nil).DeleteInvoice), invoiceId, siteCode)
-}
-
 // GetInvoiceDetail mocks base method.
-func (m *MockInvoiceRepository) GetInvoiceDetail(invoiceId, siteCode string) (pl.Invoice, error) {
+func (m *MockInvoiceRepository) GetInvoiceDetail(invoiceID, siteCode string) (pl.Invoice, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetInvoiceDetail", invoiceId, siteCode)
+	ret := m.ctrl.Call(m, "GetInvoiceDetail", invoiceID, siteCode)
 	ret0, _ := ret[0].(pl.Invoice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetInvoiceDetail indicates an expected call of GetInvoiceDetail.
-func (mr *MockInvoiceRepositoryMockRecorder) GetInvoiceDetail(invoiceId, siteCode interface{}) *gomock.Call {
+func (mr *MockInvoiceRepositoryMockRecorder) GetInvoiceDetail(invoiceID, siteCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInvoiceDetail", reflect.TypeOf((*MockInvoiceRepository)(nil).GetInvoiceDetail), invoiceId, siteCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInvoiceDetail", reflect.TypeOf((*MockInvoiceRepository)(nil).GetInvoiceDetail), invoiceID, siteCode)
 }
 
 // GetInvoiceList mocks base method.
-func (m *MockInvoiceRepository) GetInvoiceList(arg0 common.ListInvoiceParams) ([]pl.Invoice, error) {
+func (m *MockInvoiceRepository) GetInvoiceList(arg0 pl0.ListInvoiceParams) ([]pl.Invoice, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetInvoiceList", arg0)
 	ret0, _ := ret[0].([]pl.Invoice)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
 // GetInvoiceList indicates an expected call of GetInvoiceList.
@@ -109,15 +96,15 @@ func (mr *MockInvoiceRepositoryMockRecorder) GetInvoiceList(arg0 interface{}) *g
 }
 
 // UpdateInvoice mocks base method.
-func (m *MockInvoiceRepository) UpdateInvoice(invoiceId, siteCode string, params common.UpdateInvoiceParams) error {
+func (m *MockInvoiceRepository) UpdateInvoice(invoiceID, siteCode string, params pl0.UpdateInvoiceParams) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateInvoice", invoiceId, siteCode, params)
+	ret := m.ctrl.Call(m, "UpdateInvoice", invoiceID, siteCode, params)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateInvoice indicates an expected call of UpdateInvoice.
-func (mr *MockInvoiceRepositoryMockRecorder) UpdateInvoice(invoiceId, siteCode, params interface{}) *gomock.Call {
+func (mr *MockInvoiceRepositoryMockRecorder) UpdateInvoice(invoiceID, siteCode, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateInvoice", reflect.TypeOf((*MockInvoiceRepository)(nil).UpdateInvoice), invoiceId, siteCode, params)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateInvoice", reflect.TypeOf((*MockInvoiceRepository)(nil).UpdateInvoice), invoiceID, siteCode, params)
 }

@@ -6,6 +6,7 @@ import (
 	"order-service/acl/ports/repositories"
 	"order-service/common"
 	"order-service/domain/aggregate"
+	ohs_pl "order-service/ohs/local/pl"
 	"sync"
 	"time"
 
@@ -71,20 +72,20 @@ func (a *OrderAdapter) GetOrderDetail(orderID, siteCode string) (pl.Order, error
 }
 
 // GetOrderList 获取订单列表
-func (a *OrderAdapter) GetOrderList(params common.ListOrderParams) ([]pl.Order, error) {
+func (a *OrderAdapter) GetOrderList(params ohs_pl.ListOrderParams) ([]pl.Order, int, error) {
 	filter := a.db.Table("orders").Where("space_id = ?", params.SpaceID)
 	if params.Status != 0 {
 		filter = filter.Where("status = ?", params.Status)
 	}
 	var total int64
 	if err := filter.Count(&total).Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	var orders []pl.Order
 	if err := filter.Limit(params.Limit).Offset(params.Offset).Find(&orders).Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return orders, nil
+	return orders, int(total), nil
 }
 
 // CheckOrderExists 检查订单是否存在

@@ -18,11 +18,11 @@ type Order struct {
 	// 支付单号ID
 	PayID string `gorm:"column:pay_id;comment:支付单号"`
 	// 订单总价
-	Price float64 `gorm:"column:price;not null;comment:订单总价"`
+	Price float32 `gorm:"column:price;not null;comment:订单总价"`
 	// 套餐版本
 	PackageVersion string `gorm:"column:package_version;not null;comment:套餐版本"`
 	// 套餐价格
-	PackagePrice float64 `gorm:"column:package_price;not null;comment:套餐价格"`
+	PackagePrice float32 `gorm:"column:package_price;not null;comment:套餐价格"`
 	// 自定义域名site-code
 	SiteCode string `gorm:"column:site_code;not null;comment:site-code"`
 	// 创建时间
@@ -38,7 +38,7 @@ type Invoice struct {
 	// 订单ID
 	OrderID string `gorm:"column:order_id;index;not null;comment:订单id" json:"order_id"`
 	// 订单总价
-	Price float64 `gorm:"column:price;not null;comment:订单总价"`
+	Price float32 `gorm:"column:price;not null;comment:订单总价"`
 	// 发票抬头
 	Name string `gorm:"column:name;not null;comment:发票抬头" json:"name"`
 	// 发票税号

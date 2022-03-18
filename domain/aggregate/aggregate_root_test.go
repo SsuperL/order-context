@@ -7,32 +7,35 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func createAggregateRoot(id string, options ...RootOptions) *AggregateRoot {
+	return NewOrderAggregateRoot(id, options...)
+}
+
 func TestSetID(t *testing.T) {
-	root := createAggregateRoot("", "", "", "", common.Unpaid, 20.5, 42)
+	root := createAggregateRoot("")
 	newID := common.RandomString(10)
 	root.SetID(newID)
 	require.Equal(t, root.Order.ID, newID)
 }
 
 func TestGetStatus(t *testing.T) {
-	root := createAggregateRoot("", "", "", "", common.Unpaid, 0, 0)
+	orderOption := WithOrderOption(common.Unpaid, 0)
+	root := createAggregateRoot("", orderOption)
 	status := root.GetStatus()
 	require.Equal(t, root.Order.Status, status)
 }
 
 func TestSetStatus(t *testing.T) {
-	root := createAggregateRoot("", "", "", "", common.Unpaid, 0, 0)
+	orderOption := WithOrderOption(common.Unpaid, 0)
+	root := createAggregateRoot("", orderOption)
 	newStatus := common.Paid
 	root.SetStatus(newStatus)
 	require.Equal(t, root.Order.Status, newStatus)
 }
 
 func TestGetID(t *testing.T) {
-	root := createAggregateRoot("", "", "", "", common.Unpaid, 20.5, 42)
+	orderOption := WithOrderOption(common.Unpaid, 0)
+	root := createAggregateRoot("", orderOption)
 	id := root.GetID()
 	require.Equal(t, id, root.Order.ID)
-}
-
-func createAggregateRoot(voucher, source, version, currency string, status common.StatusType, price, total float64) *AggregateRoot {
-	return NewOrderAggregateRoot(common.RandomString(10), common.RandomString(10), voucher, source, version, currency, status, price, total)
 }

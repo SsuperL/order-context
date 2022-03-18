@@ -6,6 +6,7 @@ import (
 	"order-service/domain/aggregate"
 	"order-service/domain/entity"
 	"order-service/domain/vo"
+	"order-service/ohs/local/pl"
 	"regexp"
 	"testing"
 	"time"
@@ -28,7 +29,7 @@ func TestCreateInvoice(t *testing.T) {
 				Name: common.RandomString(6),
 			},
 		},
-		Order: vo.Order{Price: float64(200)},
+		Order: vo.Order{Price: float32(200)},
 	}
 
 	mock.ExpectBegin()
@@ -61,7 +62,7 @@ func TestCreateInvoiceWithError(t *testing.T) {
 				Name: common.RandomString(6),
 			},
 		},
-		Order: vo.Order{Price: float64(200)},
+		Order: vo.Order{Price: float32(200)},
 	}
 
 	mock.ExpectBegin()
@@ -121,7 +122,7 @@ func TestUpdateInvoice(t *testing.T) {
 	invoiceAdapter := InvoiceAdapter{db: gormDB}
 	invoiceID, siteCode := common.RandomString(10), "001001"
 	status := common.Invoiced
-	param := common.UpdateInvoiceParams{
+	param := pl.UpdateInvoiceParams{
 		Status: status,
 		Path:   common.RandomString(12),
 	}
@@ -157,7 +158,7 @@ func TestCheckInvoiceExists(t *testing.T) {
 func TestGetInvoiceList(t *testing.T) {
 	mock, gormDB := NewMockDB()
 	invoiceAdapter := InvoiceAdapter{db: gormDB}
-	params := common.ListInvoiceParams{
+	params := pl.ListInvoiceParams{
 		OrderID: common.RandomString(10),
 		Status:  common.UnInvoiced,
 		Offset:  0,
@@ -165,14 +166,14 @@ func TestGetInvoiceList(t *testing.T) {
 	}
 
 	countQuery := `SELECT count(*) FROM "invoices" WHERE order_id = $1 AND status = $2`
-	mock.ExpectQuery(regexp.QuoteMeta(countQuery)).WillReturnRows(sqlmock.NewRows([]string{}))
+	mock.ExpectQuery(regexp.QuoteMeta(countQuery)).WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(1))
 	query := `SELECT * FROM  "invoices" WHERE order_id = $1 AND status = $2`
 	mock.ExpectQuery(regexp.QuoteMeta(query)).WithArgs(params.OrderID, params.Status).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "order_id", "price", "name", "code", "status", "path", "site_code", "created_at", "updated_at"}).
 			AddRow(common.RandomString(10), common.RandomString(10), 100.00, common.RandomString(6), common.GenerateNumber(), common.Invoiced, common.RandomString(12), "001001", time.Now(), time.Now()))
 
-	invoices, err := invoiceAdapter.GetInvoiceList(params)
+	invoices, total, err := invoiceAdapter.GetInvoiceList(params)
 	require.NoError(t, err)
-	require.Len(t, invoices, 1)
+	require.Len(t, invoices, total)
 	require.NotEmpty(t, invoices)
 }

@@ -2,12 +2,21 @@ syntax = "proto3";
 
 option go_package="./;pl";
 package order;
+import "google/protobuf/timestamp.proto";
+
+service InvoiceService{
+    rpc CreateInvoice(CreateInvoiceRequest)returns(CreateInvoiceResponse){}
+    rpc UpdateInvoice(UpdateInvoiceRequest)returns(UpdateInvoiceResponse){}
+    rpc GetInvoiceDetail(GetInvoiceDetailRequest)returns(GetInvoiceDetailResponse){}
+    rpc GetInvoiceList(GetInvoiceListRequest)returns(GetInvoiceListResponse){}
+}
 
 enum InvoiceStatus {
     INVOICED = 0;
     UNINVOICED = 1;
 }
 
+// 创建发票请求
 message CreateInvoiceRequest{
     // 订单id
     string order_id = 1;
@@ -21,14 +30,63 @@ message CreateInvoiceRequest{
     float price = 5;
 }
 
+// 更新发票请求
 message UpdateInvoiceRequest{
-
+    // 发票id
+    string id = 1;
+    // 发票状态
+    InvoiceStatus status = 2;
+    // 发票保存路径
+    string path = 3;
 }
 
+// 获取发票详情请求
 message GetInvoiceDetailRequest{
-
+    // 发票id
+    string id = 1;
+    // string site_code = 2;
 }
 
+// 获取发票列表请求
 message GetInvoiceListRequest{
+    // 订单id
+    string order_id = 1;
+    // 发票状态
+    InvoiceStatus status = 2;
+    int32 limit = 3;
+    int32 offset = 4;
+}
 
+// 创建发票响应
+message CreateInvoiceResponse{
+    string id = 1;
+}
+
+// 更新发票响应
+message UpdateInvoiceResponse{
+    bool success = 1;
+}
+
+message InvoiceBase {
+    string id = 1;
+    string order_id = 2;
+    float price = 3;
+    string name = 4;
+    string code = 5;
+    InvoiceStatus status = 6;
+    string path = 7;
+    string site_code = 8;
+    google.protobuf.Timestamp created_at = 9;
+    google.protobuf.Timestamp updated_at = 10;
+}
+
+// 获取发票详情响应
+message GetInvoiceDetailResponse{
+    InvoiceBase result = 1;
+}
+
+// 获取发票列表响应
+message GetInvoiceListResponse{
+    repeated InvoiceBase data = 1;
+    int32 total = 2;
 }

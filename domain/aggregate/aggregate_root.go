@@ -18,28 +18,52 @@ type AggregateRoot struct {
 	Space *entity.Space
 }
 
+// RootOptions ...
+type RootOptions func(*AggregateRoot)
+
+// WithOrderOption Init Order with order params
+func WithOrderOption(status common.StatusType, price float32) RootOptions {
+	return func(ag *AggregateRoot) {
+		ag.Order.Status = status
+		ag.Order.Price = price
+	}
+}
+
+// WithPaymentOption init order with payment params
+func WithPaymentOption(voucher, source, currency string, total float32) RootOptions {
+	return func(ag *AggregateRoot) {
+		ag.Payment.Voucher = voucher
+		ag.Payment.Source = source
+		ag.Payment.Currency = currency
+		ag.Payment.Total = total
+	}
+}
+
+// WithPackageOption init order with package params
+func WithPackageOption(version string, price float32) RootOptions {
+	return func(ag *AggregateRoot) {
+		ag.Package.Version = version
+		ag.Package.Price = price
+	}
+}
+
+// WithSpaceOption init order with space id
+func WithSpaceOption(spaceID string) RootOptions {
+	return func(ag *AggregateRoot) {
+		ag.Space.ID = spaceID
+	}
+}
+
 // NewOrderAggregateRoot 聚合根构造函数，在本地应用服务生成
-func NewOrderAggregateRoot(id, spaceID, voucher, source, version, currency string,
-	status common.StatusType, price, total float64) *AggregateRoot {
-	return &AggregateRoot{
-		Order: &entity.Order{
-			ID:     id,
-			Status: status,
-			Price:  total,
-		},
-		Payment: vo.Payment{
-			Voucher:  voucher,
-			Source:   source,
-			Currency: currency,
-			Total:    total,
-		},
-		Package: vo.Package{
-			Version: version,
-			Price:   price,
-		},
-		Space: &entity.Space{
-			ID: spaceID,
-		}}
+func NewOrderAggregateRoot(id string, options ...RootOptions) *AggregateRoot {
+	root := &AggregateRoot{
+		Order: &entity.Order{ID: id},
+		Space: &entity.Space{},
+	}
+	for _, op := range options {
+		op(root)
+	}
+	return root
 }
 
 // SetID 设置聚合根id

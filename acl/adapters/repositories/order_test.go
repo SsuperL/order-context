@@ -7,6 +7,7 @@ import (
 	"order-service/domain/aggregate"
 	"order-service/domain/entity"
 	"order-service/domain/vo"
+	ohs_pl "order-service/ohs/local/pl"
 	"regexp"
 	"testing"
 	"time"
@@ -50,11 +51,11 @@ func TestCreateOrder(t *testing.T) {
 		Order: &entity.Order{
 			ID:     common.RandomString(10),
 			Status: common.Unpaid,
-			Price:  float64(200),
+			Price:  float32(200),
 		},
 		Package: vo.Package{
 			Version: "v1",
-			Price:   float64(100),
+			Price:   float32(100),
 		},
 		Space: &entity.Space{
 			ID: common.RandomString(10),
@@ -86,11 +87,11 @@ func TestCreateOrderWithError(t *testing.T) {
 		Order: &entity.Order{
 			ID:     common.RandomString(10),
 			Status: common.Unpaid,
-			Price:  float64(200),
+			Price:  float32(200),
 		},
 		Package: vo.Package{
 			Version: "v1",
-			Price:   float64(100),
+			Price:   float32(100),
 		},
 		Space: &entity.Space{
 			ID: common.RandomString(10),
@@ -167,7 +168,7 @@ func TestCheckOrderExists(t *testing.T) {
 func TestGetOrderList(t *testing.T) {
 	mock, gormDB := NewMockDB()
 	orderAdapter := OrderAdapter{db: gormDB}
-	params := common.ListOrderParams{
+	params := ohs_pl.ListOrderParams{
 		SpaceID: common.RandomString(10),
 		Status:  common.Unpaid,
 		Offset:  0,
@@ -175,15 +176,16 @@ func TestGetOrderList(t *testing.T) {
 	}
 
 	countQuery := `SELECT count(*) FROM "orders" WHERE space_id = $1 AND status = $2`
-	mock.ExpectQuery(regexp.QuoteMeta(countQuery)).WillReturnRows(sqlmock.NewRows([]string{}))
+	mock.ExpectQuery(regexp.QuoteMeta(countQuery)).WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(1))
 	query := `SELECT * FROM  "orders" WHERE space_id = $1 AND status = $2`
 	mock.ExpectQuery(regexp.QuoteMeta(query)).WithArgs(params.SpaceID, params.Status).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "status", "number", "space_id",
 			"pay_id", "price", "package_version", "package_price", "site_code", "created_at", "updated_at"}).AddRow(
 			common.RandomString(10), common.Unpaid, common.GenerateNumber(), common.RandomString(10), common.RandomString(6), 100, "v1", 100, "001001", time.Now(), time.Now()))
 
-	orders, err := orderAdapter.GetOrderList(params)
+	orders, total, err := orderAdapter.GetOrderList(params)
+	require.Equal(t, len(orders), total)
 	require.NoError(t, err)
-	require.Len(t, orders, 1)
+	// require.Len(t, orders, total)
 	require.NotEmpty(t, orders)
 }

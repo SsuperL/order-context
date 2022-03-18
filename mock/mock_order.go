@@ -8,6 +8,7 @@ import (
 	pl "order-service/acl/adapters/pl"
 	common "order-service/common"
 	aggregate "order-service/domain/aggregate"
+	pl0 "order-service/ohs/local/pl"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -37,18 +38,18 @@ func (m *MockOrderRepository) EXPECT() *MockOrderRepositoryMockRecorder {
 }
 
 // CheckOrderExists mocks base method.
-func (m *MockOrderRepository) CheckOrderExists(orderId, siteCode string) (bool, error) {
+func (m *MockOrderRepository) CheckOrderExists(orderID, siteCode string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CheckOrderExists", orderId, siteCode)
+	ret := m.ctrl.Call(m, "CheckOrderExists", orderID, siteCode)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CheckOrderExists indicates an expected call of CheckOrderExists.
-func (mr *MockOrderRepositoryMockRecorder) CheckOrderExists(orderId, siteCode interface{}) *gomock.Call {
+func (mr *MockOrderRepositoryMockRecorder) CheckOrderExists(orderID, siteCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckOrderExists", reflect.TypeOf((*MockOrderRepository)(nil).CheckOrderExists), orderId, siteCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckOrderExists", reflect.TypeOf((*MockOrderRepository)(nil).CheckOrderExists), orderID, siteCode)
 }
 
 // CreateOrder mocks base method.
@@ -66,27 +67,28 @@ func (mr *MockOrderRepositoryMockRecorder) CreateOrder(arg0, arg1 interface{}) *
 }
 
 // GetOrderDetail mocks base method.
-func (m *MockOrderRepository) GetOrderDetail(orderId, siteCode string) (pl.Order, error) {
+func (m *MockOrderRepository) GetOrderDetail(orderID, siteCode string) (pl.Order, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetOrderDetail", orderId, siteCode)
+	ret := m.ctrl.Call(m, "GetOrderDetail", orderID, siteCode)
 	ret0, _ := ret[0].(pl.Order)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetOrderDetail indicates an expected call of GetOrderDetail.
-func (mr *MockOrderRepositoryMockRecorder) GetOrderDetail(orderId, siteCode interface{}) *gomock.Call {
+func (mr *MockOrderRepositoryMockRecorder) GetOrderDetail(orderID, siteCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrderDetail", reflect.TypeOf((*MockOrderRepository)(nil).GetOrderDetail), orderId, siteCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrderDetail", reflect.TypeOf((*MockOrderRepository)(nil).GetOrderDetail), orderID, siteCode)
 }
 
 // GetOrderList mocks base method.
-func (m *MockOrderRepository) GetOrderList(arg0 common.ListOrderParams) ([]pl.Order, error) {
+func (m *MockOrderRepository) GetOrderList(arg0 pl0.ListOrderParams) ([]pl.Order, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetOrderList", arg0)
 	ret0, _ := ret[0].([]pl.Order)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
 // GetOrderList indicates an expected call of GetOrderList.
@@ -96,15 +98,15 @@ func (mr *MockOrderRepositoryMockRecorder) GetOrderList(arg0 interface{}) *gomoc
 }
 
 // UpdateOrderStatus mocks base method.
-func (m *MockOrderRepository) UpdateOrderStatus(orderId, siteCode string, status common.StatusType) error {
+func (m *MockOrderRepository) UpdateOrderStatus(orderID, siteCode string, status common.StatusType) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateOrderStatus", orderId, siteCode, status)
+	ret := m.ctrl.Call(m, "UpdateOrderStatus", orderID, siteCode, status)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateOrderStatus indicates an expected call of UpdateOrderStatus.
-func (mr *MockOrderRepositoryMockRecorder) UpdateOrderStatus(orderId, siteCode, status interface{}) *gomock.Call {
+func (mr *MockOrderRepositoryMockRecorder) UpdateOrderStatus(orderID, siteCode, status interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOrderStatus", reflect.TypeOf((*MockOrderRepository)(nil).UpdateOrderStatus), orderId, siteCode, status)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOrderStatus", reflect.TypeOf((*MockOrderRepository)(nil).UpdateOrderStatus), orderID, siteCode, status)
 }

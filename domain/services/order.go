@@ -1,19 +1,16 @@
 package services
 
 import (
-	// model "order-service/acl/adapters/repositories"
-
-	"errors"
+	"fmt"
 	client_adapter "order-service/acl/adapters/clients"
-	model "order-service/acl/adapters/pl"
 	repository_adapter "order-service/acl/adapters/repositories"
 	client_port "order-service/acl/ports/clients"
 	repository_port "order-service/acl/ports/repositories"
 	"order-service/common"
 	"order-service/domain/aggregate"
+	ohs_pl "order-service/ohs/local/pl"
+	"order-service/ohs/local/pl/errors"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 // 后期修改为读取配置表
@@ -39,16 +36,25 @@ func NewOrderService(root *aggregate.AggregateRoot) *OrderService {
 	}
 }
 
+// WithPortAndClient 传参方式构造函数，可替换
+func WithPortAndClient(root *aggregate.AggregateRoot, port repository_port.OrderRepository, client client_port.UUIDClient) *OrderService {
+	return &OrderService{
+		Port:       port,
+		Order:      root,
+		UUIDClient: client,
+	}
+}
+
 // CreateOrder 创建订单
 func (osv *OrderService) CreateOrder(siteCode string) (orderID string, err error) {
 	// 校验订单有效性
-	args := common.ListOrderParams{
+	args := ohs_pl.ListOrderParams{
 		SpaceID: osv.Order.Space.ID,
 		Status:  common.Unpaid,
 		Limit:   1,
 		Offset:  0,
 	}
-	orders, err := osv.Port.GetOrderList(args)
+	orders, _, err := osv.Port.GetOrderList(args)
 	if err != nil {
 		return
 	}
@@ -66,59 +72,50 @@ func (osv *OrderService) CreateOrder(siteCode string) (orderID string, err error
 		} else {
 			// 未过期提示错误原因，直接返回
 			// TODO: 错误处理
-			return "", errors.New("UnpayOrderExists")
+			return "", errors.UnpaidOrderExists("Unpaid order exists")
 		}
 	}
 
 	// 通过uuid服务生成uuid
 	res, err := osv.UUIDClient.GetUUID(1)
-	orderID = res.ID
 	if err != nil {
-		// TODO: 错误处理
-		return
+		return "", errors.InternalServerError(fmt.Sprintf("Get uuid failed: %v", err))
 	}
+	orderID = res.ID
 	osv.Order.SetID(orderID)
 	// 创建订单，与资源库端口（南向网关进行交互）
 	err = osv.Port.CreateOrder(osv.Order, siteCode)
 	if err != nil {
-		// TODO: 错误处理
-		return
+		return "", errors.InternalServerError(fmt.Sprintf("Create order failed: %v", err))
 	}
 	return
 }
 
-// GetOrderDetail 获取订单详情，返回数据待定义
-func (osv *OrderService) GetOrderDetail(siteCode string) (order model.Order, err error) {
-	order, err = osv.Port.GetOrderDetail(osv.Order.GetID(), siteCode)
-	if err != nil && err == gorm.ErrRecordNotFound {
-		// TODO: 错误处理
-		return
-	}
-	return
-}
+// GetOrderDetail 获取订单详情
+// func (osv *OrderService) GetOrderDetail(siteCode string) (order model.Order, err error) {
+// 	order, err = osv.Port.GetOrderDetail(osv.Order.GetID(), siteCode)
+// 	if err != nil {
+// 		return
+// 	}
+// 	return
+// }
 
-// GetOrderList 获取订单列表
-func (osv *OrderService) GetOrderList(args common.ListOrderParams) ([]model.Order, error) {
-	// 根据指定id列表获取订单列表
-	orders, err := osv.Port.GetOrderList(args)
-	if err != nil {
-		// TODO: 错误处理
-		return nil, err
-	}
+// // GetOrderList 获取订单列表
+// func (osv *OrderService) GetOrderList(args ohs_pl.ListOrderParams) ([]model.Order, int, error) {
+// 	// 根据指定id列表获取订单列表
+// 	orders, total, err := osv.Port.GetOrderList(args)
+// 	if err != nil {
+// 		return nil, total, err
+// 	}
 
-	return orders, nil
-}
+// 	return orders, total, nil
+// }
 
 // UpdateOrderStatus 更新订单状态
-// params 或者分别传参
 func (osv *OrderService) UpdateOrderStatus(siteCode string, status common.StatusType) (err error) {
 	// 校验订单是否存在
 	_, err = osv.Port.CheckOrderExists(osv.Order.GetID(), siteCode)
 	if err != nil {
-		// TODO:错误处理
-		if err == gorm.ErrRecordNotFound {
-			return
-		}
 		return
 	}
 	// 更新订单状态

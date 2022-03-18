@@ -9,5 +9,5 @@ type Order struct {
 	// 订单状态
 	Status common.StatusType
 	// 订单总价
-	Price float64
+	Price float32
 }

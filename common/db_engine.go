@@ -39,7 +39,6 @@ func DisconnectDB() error {
 	return nil
 }
 
-//TODO:数据库迁移
 // NewDBEngine create db engine
 func NewDBEngine() *gorm.DB {
 	db, err := ConnectDB()

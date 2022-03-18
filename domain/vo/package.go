@@ -5,5 +5,5 @@ type Package struct {
 	// 套餐版本
 	Version string
 	// 套餐价格
-	Price float64
+	Price float32
 }
