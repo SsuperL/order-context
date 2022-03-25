@@ -1,10 +1,10 @@
 package services
 
 import (
-	"order-service/acl/adapters/pl"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	"order-service/mock"
+	"order-context/acl/adapters/pl"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	"order-context/mock"
 	"testing"
 	"time"
 

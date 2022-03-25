@@ -2,7 +2,7 @@ package clients
 
 import (
 	"net/http"
-	"order-service/common"
+	"order-context/common"
 	"testing"
 
 	"github.com/nbio/st"

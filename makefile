@@ -9,3 +9,12 @@ server:
 
 client1:
 	go run client/main.go
+
+migrate.create:
+	migrate create -ext sql -dir ./migrations -seq init_table_schema
+
+migrate.up:
+	migrate -path ./migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose up
+
+migrate.down:
+	migrate -path ./migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose down

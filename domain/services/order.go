@@ -2,14 +2,14 @@ package services
 
 import (
 	"fmt"
-	client_adapter "order-service/acl/adapters/clients"
-	repository_adapter "order-service/acl/adapters/repositories"
-	client_port "order-service/acl/ports/clients"
-	repository_port "order-service/acl/ports/repositories"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	ohs_pl "order-service/ohs/local/pl"
-	"order-service/ohs/local/pl/errors"
+	client_adapter "order-context/acl/adapters/clients"
+	repository_adapter "order-context/acl/adapters/repositories"
+	client_port "order-context/acl/ports/clients"
+	repository_port "order-context/acl/ports/repositories"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	ohs_pl "order-context/ohs/local/pl"
+	"order-context/ohs/local/pl/errors"
 	"time"
 )
 

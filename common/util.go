@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"path"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -33,4 +35,14 @@ func RandomString(n int) string {
 		sb.WriteByte(c)
 	}
 	return sb.String()
+}
+
+// GetProjectAbPathByCaller get absolute path of file
+func GetProjectAbPathByCaller() (abPath string) {
+	_, filename, _, ok := runtime.Caller(0)
+	if ok {
+		filePath := path.Dir(filename)
+		abPath = path.Dir(filePath)
+	}
+	return
 }

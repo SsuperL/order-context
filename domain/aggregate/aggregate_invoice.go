@@ -1,9 +1,9 @@
 package aggregate
 
 import (
-	"order-service/common"
-	"order-service/domain/entity"
-	"order-service/domain/vo"
+	"order-context/common"
+	"order-context/domain/entity"
+	"order-context/domain/vo"
 )
 
 // InvoiceAggregate 发票聚合
@@ -38,8 +38,10 @@ func WithOrderOptionForInvoice(price float32) InvoiceOptions {
 // NewInvoiceAggregate 发票聚合构造函数
 func NewInvoiceAggregate(rootID, id string, options ...InvoiceOptions) *InvoiceAggregate {
 	invoiceAg := &InvoiceAggregate{
-		RootID:  rootID,
-		Invoice: &entity.Invoice{},
+		RootID: rootID,
+		Invoice: &entity.Invoice{
+			ID: id,
+		},
 	}
 	for _, option := range options {
 		option(invoiceAg)

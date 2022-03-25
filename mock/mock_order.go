@@ -5,10 +5,10 @@
 package mock
 
 import (
-	pl "order-service/acl/adapters/pl"
-	common "order-service/common"
-	aggregate "order-service/domain/aggregate"
-	pl0 "order-service/ohs/local/pl"
+	pl "order-context/acl/adapters/pl"
+	common "order-context/common"
+	aggregate "order-context/domain/aggregate"
+	pl0 "order-context/ohs/local/pl"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

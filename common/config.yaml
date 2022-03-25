@@ -10,13 +10,9 @@ log:
   gin_console: true
 db:
   driver: postgres
-  dsn: host=db.internal.realibox.com,user=postgres,password=realibox2021_postgres,dbname=order,port=54321,sslmode=disable,TimeZone=Asia/Shanghai
-  redis:
-    addr: 10.17.1.44:63779
-    db: 9
-    password: realibox2021_redis
-
-gormlog: true # gorm 的日志魔视, true 是详细日志, false 不记录日志
+  # dsn: host=db.internal.realibox.com user=postgres password=realibox2021_postgres dbname=order port=54321 sslmode=disable TimeZone=Asia/Shanghai
+  dsn: host=localhost user=postgres password=driver dbname=order port=5432 sslmode=disable TimeZone=Asia/Shanghai
+gormlog: true # gorm 的日志模式, true 是详细日志, false 不记录日志
 
 uuidsrv:
   host: http://127.0.0.1:8181

@@ -1,7 +1,7 @@
 package aggregate
 
 import (
-	"order-service/common"
+	"order-context/common"
 	"testing"
 
 	"github.com/stretchr/testify/require"

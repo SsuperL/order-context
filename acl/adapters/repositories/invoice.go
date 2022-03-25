@@ -1,11 +1,12 @@
 package repositories
 
 import (
-	"order-service/acl/adapters/pl"
-	"order-service/acl/ports/repositories"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	ohs_pl "order-service/ohs/local/pl"
+	"order-context/acl/adapters/pl"
+	"order-context/acl/ports/repositories"
+	"order-context/common"
+	"order-context/common/db"
+	"order-context/domain/aggregate"
+	ohs_pl "order-context/ohs/local/pl"
 	"sync"
 	"time"
 
@@ -30,7 +31,7 @@ func NewInvoiceAdapter() repositories.InvoiceRepository {
 	iOnce.Do(func() {
 		i = &InvoiceAdapter{
 			// 创建数据库引擎
-			db: common.NewDBEngine(),
+			db: db.NewDBEngine(),
 		}
 	})
 	return i
@@ -103,7 +104,7 @@ func (a *InvoiceAdapter) UpdateInvoice(invoiceID, siteCode string, params ohs_pl
 		updateParam["path"] = params.Path
 	}
 	updateParam["updated_at"] = time.Now()
-	if err := a.db.Debug().Model(&pl.Invoice{}).Where("id = ? AND site_code = ?", invoiceID, siteCode).Updates(updateParam).Error; err != nil {
+	if err := a.db.Model(&pl.Invoice{}).Where("id = ? AND site_code = ?", invoiceID, siteCode).Updates(updateParam).Error; err != nil {
 		return err
 	}
 

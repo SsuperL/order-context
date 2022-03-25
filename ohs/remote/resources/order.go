@@ -2,11 +2,11 @@ package resources
 
 import (
 	"context"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	"order-service/ohs/local/pl"
-	"order-service/ohs/local/pl/errors"
-	"order-service/ohs/local/services"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	"order-context/ohs/local/pl"
+	"order-context/ohs/local/pl/errors"
+	"order-context/ohs/local/services"
 
 	"google.golang.org/grpc/metadata"
 )
@@ -71,8 +71,8 @@ func (r *OrderResource) UpdateOrder(ctx context.Context, req *pl.UpdateOrderRequ
 	return res, nil
 }
 
-// GetOderDetail get order details
-func (r *OrderResource) GetOderDetail(ctx context.Context, req *pl.GetOrderDetailRequest) (*pl.GetOrderDetailResponse, error) {
+// GetOrderDetail get order details
+func (r *OrderResource) GetOrderDetail(ctx context.Context, req *pl.GetOrderDetailRequest) (*pl.GetOrderDetailResponse, error) {
 	id := req.GetId()
 
 	if err := contextError(ctx); err != nil {

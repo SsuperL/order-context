@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"order-service/common"
-	"order-service/domain/vo"
+	"order-context/common"
+	"order-context/domain/vo"
 )
 
 // Invoice 实体

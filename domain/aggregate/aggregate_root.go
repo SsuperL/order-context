@@ -1,9 +1,9 @@
 package aggregate
 
 import (
-	"order-service/common"
-	"order-service/domain/entity"
-	"order-service/domain/vo"
+	"order-context/common"
+	"order-context/domain/entity"
+	"order-context/domain/vo"
 )
 
 // AggregateRoot 订单聚合，聚合根

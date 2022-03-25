@@ -2,12 +2,12 @@ package services
 
 import (
 	"fmt"
-	dao "order-service/acl/adapters/repositories"
-	"order-service/acl/ports/repositories"
-	"order-service/domain/aggregate"
-	"order-service/domain/services"
-	"order-service/ohs/local/pl"
-	"order-service/ohs/local/pl/errors"
+	dao "order-context/acl/adapters/repositories"
+	"order-context/acl/ports/repositories"
+	"order-context/domain/aggregate"
+	"order-context/domain/services"
+	"order-context/ohs/local/pl"
+	"order-context/ohs/local/pl/errors"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -44,7 +44,7 @@ func (a *InvoiceAppService) CreateInvoice(siteCode string) (*pl.CreateInvoiceRes
 
 	invoiceID, err := a.invoiceService.CreateInvoice(siteCode)
 	if err != nil {
-		return &pl.CreateInvoiceResponse{}, status.Errorf(codes.Internal, "Error creating invoice: %v", err)
+		return &pl.CreateInvoiceResponse{}, err
 	}
 
 	return &pl.CreateInvoiceResponse{

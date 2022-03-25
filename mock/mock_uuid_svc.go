@@ -5,7 +5,7 @@
 package mock
 
 import (
-	pl "order-service/acl/adapters/pl"
+	pl "order-context/acl/adapters/pl"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

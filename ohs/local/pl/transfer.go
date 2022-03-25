@@ -1,8 +1,8 @@
 package pl
 
 import (
-	model "order-service/acl/adapters/pl"
-	"order-service/common"
+	model "order-context/acl/adapters/pl"
+	"order-context/common"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

@@ -2,11 +2,11 @@ package repositories
 
 import (
 	"fmt"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	"order-service/domain/entity"
-	"order-service/domain/vo"
-	"order-service/ohs/local/pl"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	"order-context/domain/entity"
+	"order-context/domain/vo"
+	"order-context/ohs/local/pl"
 	"regexp"
 	"testing"
 	"time"

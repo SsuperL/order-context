@@ -2,11 +2,11 @@ package services
 
 import (
 	"fmt"
-	"order-service/acl/adapters/pl"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	"order-service/mock"
-	msg "order-service/ohs/local/pl"
+	"order-context/acl/adapters/pl"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	"order-context/mock"
+	msg "order-context/ohs/local/pl"
 	"testing"
 
 	"github.com/golang/mock/gomock"

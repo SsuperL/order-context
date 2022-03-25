@@ -17,6 +17,9 @@ const (
 	Failed
 	// End ...
 	End
+)
+
+const (
 	// Invoiced 已开票
 	Invoiced InvoiceStatusType = iota + 1
 	// UnInvoiced 未开票
@@ -26,4 +29,4 @@ const (
 )
 
 // UUIDurl url of uuid-service
-var UUIDurl = "http://127.0.0.1:8181/api/v1"
+var UUIDurl = "http://192.168.119.30:8181/api/v1"

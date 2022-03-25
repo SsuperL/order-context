@@ -2,11 +2,11 @@ package resources
 
 import (
 	"context"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	"order-service/ohs/local/pl"
-	"order-service/ohs/local/pl/errors"
-	"order-service/ohs/local/services"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	"order-context/ohs/local/pl"
+	"order-context/ohs/local/pl/errors"
+	"order-context/ohs/local/services"
 )
 
 // InvoiceResource ...
@@ -59,7 +59,8 @@ func (i *InvoiceResource) UpdateInvoice(ctx context.Context, req *pl.UpdateInvoi
 		return nil, err
 	}
 
-	invoiceAppService := services.NewInvoiceAppService("", id)
+	invoiceOption := aggregate.WithInvoiceOption(status, req.GetPath(), "")
+	invoiceAppService := services.NewInvoiceAppService("", id, invoiceOption)
 	params := pl.UpdateInvoiceParams{
 		Status: status,
 		Path:   req.GetPath(),

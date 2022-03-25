@@ -2,13 +2,13 @@ package services
 
 import (
 	"fmt"
-	client_adapter "order-service/acl/adapters/clients"
-	repository_adapter "order-service/acl/adapters/repositories"
-	client_port "order-service/acl/ports/clients"
-	repository_port "order-service/acl/ports/repositories"
-	"order-service/domain/aggregate"
-	"order-service/ohs/local/pl"
-	"order-service/ohs/local/pl/errors"
+	client_adapter "order-context/acl/adapters/clients"
+	repository_adapter "order-context/acl/adapters/repositories"
+	client_port "order-context/acl/ports/clients"
+	repository_port "order-context/acl/ports/repositories"
+	"order-context/domain/aggregate"
+	"order-context/ohs/local/pl"
+	"order-context/ohs/local/pl/errors"
 )
 
 // InvoiceService 发票领域服务
@@ -52,11 +52,11 @@ func (isv *InvoiceService) CreateInvoice(siteCode string) (invoiceID string, err
 	}
 	// 生成发票id
 	res, err := isv.UUIDClient.GetUUID(1)
-	invoiceID = res.ID
 	if err != nil {
 		err = errors.InternalServerError(fmt.Sprintf("Get uuid failed: %v", err))
 		return
 	}
+	invoiceID = res.ID
 	// 创建发票
 	isv.InvoiceAg.SetID(invoiceID)
 	err = isv.InvoicePort.CreateInvoice(isv.InvoiceAg, siteCode)

@@ -2,11 +2,12 @@ package repositories
 
 import (
 	"fmt"
-	"order-service/acl/adapters/pl"
-	"order-service/acl/ports/repositories"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	ohs_pl "order-service/ohs/local/pl"
+	"order-context/acl/adapters/pl"
+	"order-context/acl/ports/repositories"
+	"order-context/common"
+	"order-context/common/db"
+	"order-context/domain/aggregate"
+	ohs_pl "order-context/ohs/local/pl"
 	"sync"
 	"time"
 
@@ -31,7 +32,7 @@ func NewOrderAdapter() repositories.OrderRepository {
 	oOnce.Do(func() {
 		oa = &OrderAdapter{
 			// 创建数据库引擎
-			db: common.NewDBEngine(),
+			db: db.NewDBEngine(),
 		}
 	})
 	return oa
@@ -64,8 +65,8 @@ func (a *OrderAdapter) CreateOrder(root *aggregate.AggregateRoot, siteCode strin
 // GetOrderDetail 获取订单详情
 func (a *OrderAdapter) GetOrderDetail(orderID, siteCode string) (pl.Order, error) {
 	var order pl.Order
-	if res := a.db.Where("id = ? AND site_code = ?", orderID, siteCode).First(&order); res.Error != nil {
-		return pl.Order{}, res.Error
+	if err := a.db.Where("id = ? AND site_code = ?", orderID, siteCode).First(&order).Error; err != nil {
+		return pl.Order{}, err
 	}
 
 	return order, nil

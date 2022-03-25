@@ -1,9 +1,9 @@
 package repositories
 
 import (
-	"order-service/acl/adapters/pl"
-	"order-service/domain/aggregate"
-	ohs_pl "order-service/ohs/local/pl"
+	"order-context/acl/adapters/pl"
+	"order-context/domain/aggregate"
+	ohs_pl "order-context/ohs/local/pl"
 )
 
 // InvoiceRepository 发票资源库端口，定义操作领域资源的方法,依赖倒置

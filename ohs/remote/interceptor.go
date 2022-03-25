@@ -2,8 +2,7 @@ package remote
 
 import (
 	"context"
-	"log"
-	"order-service/ohs/local/pl/errors"
+	"order-context/ohs/local/pl/errors"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -26,12 +25,7 @@ func UnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 		return nil, errors.PreconditionFailed("precondition failed")
 	}
 	// newCtx := metadata.NewIncomingContext(ctx, md)
-	m, err := handler(ctx, req)
-	if err != nil {
-		log.Fatalf("RPC failed with error: %v", err)
-	}
-
-	return m, err
+	return handler(ctx, req)
 }
 
 func validSiteCode(siteCode string) bool {

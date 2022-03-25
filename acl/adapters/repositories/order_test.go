@@ -3,11 +3,11 @@ package repositories
 import (
 	"database/sql/driver"
 	"fmt"
-	"order-service/common"
-	"order-service/domain/aggregate"
-	"order-service/domain/entity"
-	"order-service/domain/vo"
-	ohs_pl "order-service/ohs/local/pl"
+	"order-context/common"
+	"order-context/domain/aggregate"
+	"order-context/domain/entity"
+	"order-context/domain/vo"
+	ohs_pl "order-context/ohs/local/pl"
 	"regexp"
 	"testing"
 	"time"
@@ -115,22 +115,22 @@ func TestCreateOrderWithError(t *testing.T) {
 	}
 }
 
-func TestGetOrderDetail(t *testing.T) {
-	mock, gormDB := NewMockDB()
-	orderAdapter := OrderAdapter{db: gormDB}
-	siteCode := "001001"
-	orderID := "testId"
+// func TestGetOrderDetail(t *testing.T) {
+// 	mock, gormDB := NewMockDB()
+// 	orderAdapter := OrderAdapter{db: gormDB}
+// 	siteCode := "001001"
+// 	orderID := "testId"
 
-	query := `SELECT * FROM  "orders" WHERE id = $1 AND site_code = $2`
-	mock.ExpectQuery(regexp.QuoteMeta(query)).WillReturnRows(sqlmock.NewRows([]string{"id", "status", "number", "space_id",
-		"pay_id", "price", "package_version", "package_price", "site_code", "created_at", "updated_at"}).AddRow(
-		orderID, common.Unpaid, common.GenerateNumber(), common.RandomString(10), common.RandomString(6), 100, "v1", 100, siteCode, time.Now(), time.Now()))
+// 	query := `SELECT * FROM  "orders" WHERE id = $1 AND site_code = $2`
+// 	mock.ExpectQuery(regexp.QuoteMeta(query)).WillReturnRows(sqlmock.NewRows([]string{"id", "status", "number", "space_id",
+// 		"pay_id", "price", "package_version", "package_price", "site_code", "created_at", "updated_at"}).AddRow(
+// 		orderID, common.Unpaid, common.GenerateNumber(), common.RandomString(10), common.RandomString(6), 100, "v1", 100, siteCode, time.Now(), time.Now()))
 
-	order, err := orderAdapter.GetOrderDetail(orderID, siteCode)
-	require.NoError(t, err)
-	require.Equal(t, order.ID, orderID)
-	require.Equal(t, order.SiteCode, siteCode)
-}
+// 	order, err := orderAdapter.GetOrderDetail(orderID, siteCode)
+// 	require.NoError(t, err)
+// 	require.Equal(t, order.ID, orderID)
+// 	require.Equal(t, order.SiteCode, siteCode)
+// }
 
 func TestUpdateOrder(t *testing.T) {
 	mock, gormDB := NewMockDB()

@@ -1,7 +1,7 @@
 package pl
 
 import (
-	"order-service/common"
+	"order-context/common"
 	"time"
 )
 
@@ -53,4 +53,14 @@ type Invoice struct {
 	CreatedAt time.Time `gorm:"column:created_at;not null;comment:创建时间"`
 	// 变更时间
 	UpdatedAt time.Time `gorm:"column:updated_at;not null;comment:更新时间"`
+}
+
+// TableName return tablename of order
+func (Order) TableName() string {
+	return "orders"
+}
+
+// TableName return tablename of invoice
+func (Invoice) TableName() string {
+	return "invoices"
 }
