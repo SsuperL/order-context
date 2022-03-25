@@ -1,0 +1,74 @@
+before_script:
+  # - export ALI_IMAGE_REGISTRY=$(if [ "${CI_COMMIT_REF_NAME}"=="internal/realihub" ];then echo ${ALI_IMAGE_REGISTRY_PRODUCTION};else echo ${ALI_IMAGE_REGISTRY};fi)  # 兼容内网环境
+  - export ALI_IMAGE_REGISTRY=${ALI_IMAGE_REGISTRY_PRODUCTION}  # 直接使用公网仓库地址
+  - export REGISTRY_IMAGE="${ALI_IMAGE_REGISTRY}"/realibox/"${CI_PROJECT_NAME}":${CI_COMMIT_REF_NAME//\//-}-$CI_PIPELINE_ID
+  - export ENVIRONMENT=`echo $CI_COMMIT_REF_NAME | awk -F '/' '{print $1}'`
+  - export KUBECTL_CONFIG=`eval echo '$'"KUBECTL_CONFIG_$(echo $ENVIRONMENT |tr 'a-z' 'A-Z')"` #根据分支名获取kubectl配置
+  - export YAML_URL=${YAML_WAREHOUSE}/${CI_PROJECT_PATH}/${ENVIRONMENT}
+  - go env -w GO111MODULE=on
+  - go env -w GOPROXY="https://goproxy.cn,direct"
+  # - apt-get install build-essential
+
+# cache go dependencies
+.go-cache:
+  variables:
+    GOPATH: $CI_PROJECT_DIR/.go
+  before_script:
+    - mkdir -p .go
+  cache:
+    paths:
+      - .go/pkg/mod
+
+stages:
+  - test
+  # - build
+  # - kubernetes
+
+test:
+  tags:
+    - hk-runner
+  stage: test
+  image: golang:1.17-stretch
+  extends: .go-cache
+  script:
+    - echo "test start ---------"
+    - go mod download
+    - go test -v -coverprofile cover.out ./...
+    - go tool cover -html=cover.out -o cover.html
+    -  go tool cover -func cover.out | grep total
+    - echo "test end -----------"
+  coverage: '/total:\t+\(statements\)\t+(\d+\.\d+)%/'
+  only:
+    - dev
+
+
+# build:
+#   tags:
+#     - internal-runner-server
+#   stage: build
+#   image: "${RUN_IMAGE}"
+#   variables:
+#     NGINX_CONFIG: "env.nginx.conf"
+#   script:
+#     - docker login -u "${ALI_IMAGE_USER}" -p "${ALI_IMAGE_PASSWORD}" "${ALI_IMAGE_REGISTRY}"
+#     - docker build . -t $REGISTRY_IMAGE
+#     - docker push "${REGISTRY_IMAGE}"
+#   only:
+#     - internal/realihub
+#     - stage/realihub
+#     - release/realihub
+#     - production/realihub
+
+# kubernetes:
+#   tags:
+#     - internal-runner-server
+#   image: "${RUN_IMAGE}"
+#   stage: kubernetes
+#   script:
+#     - cat ${KUBECTL_CONFIG} > /root/.kube/config                    # 从项目组的变量中读取 k8s的配置
+#     - curl -SsL ${YAML_URL}/kubernetes.sh | sh -x 
+#   only:
+#     - internal/realihub
+#     - stage/realihub
+#     - release/realihub
+#     - production/realihub
