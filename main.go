@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
+	"order-context/common"
 	"order-context/ohs/local/pl"
 	"order-context/ohs/remote"
 	"order-context/ohs/remote/resources"
@@ -12,7 +14,8 @@ import (
 )
 
 func main() {
-	var addr = "localhost:50051"
+	config := common.LoadConfig()
+	var addr = fmt.Sprintf(":%d", config.Port)
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -36,6 +39,16 @@ func main() {
 	pl.RegisterOrderServiceServer(s, orderServer)
 	pl.RegisterInvoiceServiceServer(s, invoiceServer)
 	reflection.Register(s)
+
+	// c := make(chan os.Signal, 1)
+	// signal.Notify(c, os.Interrupt)
+	// go func() {
+	// 	for range c {
+	// 		log.Println("shutting down gRPC server...")
+	// 		s.GracefulStop()
+	// 		// <-ctx.Done()
+	// 	}
+	// }()
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

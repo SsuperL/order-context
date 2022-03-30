@@ -18,3 +18,10 @@ migrate.up:
 
 migrate.down:
 	migrate -path ./migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose down
+
+test:
+	go test -v -coverprofile cover.out ./...
+	go tool cover -func cover.out
+	go tool cover -html=cover.out -o cover.html
+
+.PHONY: gen_proto gen_errors server client1 migrate.up migrate.down migrate.create get

@@ -1,0 +1,7 @@
+FROM migrate/migrate 
+
+COPY migrations/* /migrations/
+
+ENTRYPOINT ["migrate","-path","/migrations"]
+
+# CMD ["migrate","-path","/migrations" "-database","localhost","-verbose","up"]

@@ -6,6 +6,7 @@ import (
 	"log"
 	"order-context/ohs/local/pl"
 	"os"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -33,15 +34,15 @@ func main() {
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 
 	// ctx := context.Background()
-	// ctx, cancel := context.WithTimeout(ctx, time.Minute*3)
-	// defer cancel()
+	ctx, cancel := context.WithTimeout(ctx, time.Minute*3)
+	defer cancel()
 
 	// res, err := c.GetOrderDetail(ctx, &pl.GetOrderDetailRequest{Id: "11"})
 	// res, err := c.GetOrderList(ctx, &pl.GetOrderListRequest{SpaceId: "", Status: 19})
 	res, err := c.CreateOrder(ctx, &pl.CreateOrderRequest{Status: 1, SpaceId: "space1"})
 	if err != nil {
 		s := status.Convert(err)
-		fmt.Println(int(s.Code()))
+		fmt.Println(s.Code())
 		fmt.Println(s.Message())
 		os.Exit(1)
 	}

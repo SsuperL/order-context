@@ -16,3 +16,6 @@ gormlog: true # gorm 的日志模式, true 是详细日志, false 不记录日�
 
 uuidsrv:
   host: http://127.0.0.1:8181
+
+addr: 127.0.0.1
+port: 9080
