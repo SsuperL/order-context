@@ -17,8 +17,11 @@ type Config struct {
 		Driver string `yaml:"driver"`
 	}
 
-	Addr string `yaml:"addr"`
-	Port int    `yaml:"port"`
+	Addr    string `yaml:"addr"`
+	Port    int    `yaml:"port"`
+	UUIDSvc struct {
+		HOST string `yaml:"host"`
+	}
 }
 
 var (

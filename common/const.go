@@ -29,4 +29,4 @@ const (
 )
 
 // UUIDurl url of uuid-service
-var UUIDurl = "http://192.168.119.30:8181/api/v1"
+// var UUIDurl = "http://192.168.119.30:8181/api/v1"
