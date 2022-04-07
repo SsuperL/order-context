@@ -4,6 +4,7 @@ import (
 	"order-context/common"
 	"order-context/domain/entity"
 	"order-context/domain/vo"
+	"strings"
 )
 
 // AggregateRoot 订单聚合，聚合根
@@ -54,7 +55,7 @@ func WithSpaceOption(spaceID string) RootOptions {
 	}
 }
 
-// NewOrderAggregateRoot 聚合根构造函数，在本地应用服务生成
+// NewOrderAggregateRoot 聚合根工厂函数，在本地应用服务生成
 func NewOrderAggregateRoot(id string, options ...RootOptions) *AggregateRoot {
 	root := &AggregateRoot{
 		Order: &entity.Order{ID: id},
@@ -68,6 +69,10 @@ func NewOrderAggregateRoot(id string, options ...RootOptions) *AggregateRoot {
 
 // SetID 设置聚合根id
 func (oar *AggregateRoot) SetID(id string) {
+	// 确保聚合根id为唯一标识
+	if len(oar.Order.ID) < 32 && strings.Contains(oar.Order.ID, "order_") {
+		return
+	}
 	oar.Order.ID = id
 }
 
