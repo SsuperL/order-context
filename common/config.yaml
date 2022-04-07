@@ -19,3 +19,5 @@ uuidsrv:
 
 addr: 127.0.0.1
 port: 9080
+
+http_port: 8018

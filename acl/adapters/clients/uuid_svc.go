@@ -27,7 +27,7 @@ func NewUUIDAdapter() clients.UUIDClient {
 
 // GetUUID 获取uuid
 func (u *UUIDAdapter) GetUUID(limit int) (pl.UUIDRes, error) {
-	url := common.FileConfig.UUIDSvc.HOST + "/uuid/generate/"
+	url := common.FileConfig.UUIDSrv.HOST + "/uuid/generate/"
 	resp, err := u.HTTPClient.Get(url)
 	if err != nil {
 		log.Printf("ERROR: uuid-service: Fail to get uuid:%v\n", err)

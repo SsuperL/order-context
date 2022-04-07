@@ -14,7 +14,7 @@ func TestGetUUID(t *testing.T) {
 	defer gock.Off()
 
 	mockID := common.RandomString(10)
-	gock.New(common.FileConfig.UUIDSvc.HOST).
+	gock.New(common.FileConfig.UUIDSrv.HOST).
 		Get("/uuid/generate/").
 		Reply(200).
 		JSON(map[string]string{"id": mockID})
@@ -32,7 +32,7 @@ func TestGetUUID(t *testing.T) {
 	st.Expect(t, gock.IsDone(), true)
 
 	// limit > 1
-	gock.New(common.FileConfig.UUIDSvc.HOST).
+	gock.New(common.FileConfig.UUIDSrv.HOST).
 		Get("/uuid/generate/").
 		Reply(200).
 		JSON(map[string][]string{"id_list": {mockID}})

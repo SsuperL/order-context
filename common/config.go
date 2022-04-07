@@ -19,9 +19,10 @@ type Config struct {
 
 	Addr    string `yaml:"addr"`
 	Port    int    `yaml:"port"`
-	UUIDSvc struct {
+	UUIDSrv struct {
 		HOST string `yaml:"host"`
 	}
+	HTTPPort int `yaml:"http_port"`
 }
 
 var (

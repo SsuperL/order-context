@@ -1,14 +1,36 @@
 syntax = "proto3";
 
-option go_package="./;pl";
 package order;
+
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package="./;pl";
 
 service OrderService {
-    rpc CreateOrder(CreateOrderRequest)returns(CreateOrderResponse){}
-    rpc UpdateOrder(UpdateOrderRequest)returns(UpdateOrderResponse){}
-    rpc GetOrderDetail(GetOrderDetailRequest)returns(GetOrderDetailResponse){}
-    rpc GetOrderList(GetOrderListRequest)returns(GetOrderListResponse){}
+    rpc CreateOrder(CreateOrderRequest)returns(CreateOrderResponse){
+        option (google.api.http) = {
+            post: "/api/v1/order"
+            body: "*"
+        };
+    }
+    rpc UpdateOrder(UpdateOrderRequest)returns(UpdateOrderResponse){
+        option (google.api.http) = {
+            put: "/api/v1/order"
+            body: "*"
+        };
+    }
+    rpc GetOrderDetail(GetOrderDetailRequest)returns(GetOrderDetailResponse){
+        option (google.api.http) = {
+            get: "/api/v1/order"
+        };
+
+    }
+    rpc GetOrderList(GetOrderListRequest)returns(GetOrderListResponse){
+        option (google.api.http) = {
+            get: "/api/v1/orders"
+        };
+    }
 }
 // 创建订单请求参数
 message CreateOrderRequest{

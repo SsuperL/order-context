@@ -1,14 +1,35 @@
 syntax = "proto3";
 
-option go_package="./;pl";
 package order;
+
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package="./;pl";
 
 service InvoiceService{
-    rpc CreateInvoice(CreateInvoiceRequest)returns(CreateInvoiceResponse){}
-    rpc UpdateInvoice(UpdateInvoiceRequest)returns(UpdateInvoiceResponse){}
-    rpc GetInvoiceDetail(GetInvoiceDetailRequest)returns(GetInvoiceDetailResponse){}
-    rpc GetInvoiceList(GetInvoiceListRequest)returns(GetInvoiceListResponse){}
+    rpc CreateInvoice(CreateInvoiceRequest)returns(CreateInvoiceResponse){
+        option (google.api.http) = {
+            post: "/api/v1/invoice"
+            body: "*"
+        };
+    }
+    rpc UpdateInvoice(UpdateInvoiceRequest)returns(UpdateInvoiceResponse){
+        option (google.api.http) = {
+            put: "/api/v1/invoice"
+            body: "*"
+        };
+    }
+    rpc GetInvoiceDetail(GetInvoiceDetailRequest)returns(GetInvoiceDetailResponse){
+        option (google.api.http) = {
+            get: "/api/v1/invoice"
+        };
+    }
+    rpc GetInvoiceList(GetInvoiceListRequest)returns(GetInvoiceListResponse){
+        option (google.api.http) = {
+            get: "/api/v1/invoices"
+        };
+    }
 }
 
 enum InvoiceStatus {

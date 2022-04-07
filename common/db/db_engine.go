@@ -43,10 +43,10 @@ func ConnectDB() (*gorm.DB, error) {
 			db, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 		}
 
-		log.Println("Connect to db successfully.")
 		if err != nil {
 			return nil, err
 		}
+		log.Println("Connect to db successfully.")
 	}
 
 	return db, err
