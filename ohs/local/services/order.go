@@ -62,9 +62,9 @@ func (a *OrderAppService) CreateOrder(siteCode string) (*pl.CreateOrderResponse,
 func (a *OrderAppService) UpdateOrder(siteCode string, orderStatus common.StatusType) (*pl.UpdateOrderResponse, error) {
 	err := a.orderService.UpdateOrderStatus(siteCode, orderStatus)
 	if err != nil {
-		// if err == gorm.ErrRecordNotFound {
-		// 	return &pl.UpdateOrderResponse{Success: false}, errors.OrderNotFound("Order not found")
-		// }
+		if err == gorm.ErrRecordNotFound {
+			return &pl.UpdateOrderResponse{Success: false}, errors.OrderNotFound("Order not found")
+		}
 
 		return &pl.UpdateOrderResponse{Success: false}, status.Errorf(codes.Internal, "Error updating order status: %v", err)
 	}

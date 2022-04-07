@@ -87,7 +87,7 @@ func TestCreateOrder(t *testing.T) {
 			},
 			patch:     func(mockID string) {},
 			expectErr: errors.UnpaidOrderExists("unpaid order exists"),
-			code:      codes.Code(400002),
+			code:      codes.AlreadyExists,
 		},
 		{
 			name: "invalid argument",
@@ -98,7 +98,7 @@ func TestCreateOrder(t *testing.T) {
 			},
 			patch:     func(mockID string) {},
 			expectErr: errors.BadRequest("invalid argument"),
-			code:      codes.Code(400001),
+			code:      codes.InvalidArgument,
 		},
 		{
 			name: "get uuid failed",
@@ -115,7 +115,7 @@ func TestCreateOrder(t *testing.T) {
 				})
 			},
 			expectErr: errors.InternalServerError("get uuid failed"),
-			code:      codes.Code(500),
+			code:      codes.Internal,
 		},
 	}
 	for i := range testCases {
@@ -189,7 +189,7 @@ func TestGetOrderDetail(t *testing.T) {
 				Id: "test",
 			},
 			expectErr: errors.OrderNotFound("order not found"),
-			code:      codes.Code(400003),
+			code:      codes.NotFound,
 		},
 	}
 	for i := range testCases {
@@ -264,7 +264,7 @@ func TestUpdateOrder(t *testing.T) {
 				Id: "test",
 			},
 			expectErr: errors.OrderNotFound("order not found"),
-			code:      codes.Code(400003),
+			code:      codes.NotFound,
 		},
 		{
 			name: "invalid argument",
@@ -273,7 +273,7 @@ func TestUpdateOrder(t *testing.T) {
 				Status: 111,
 			},
 			expectErr: errors.BadRequest("invalid argument"),
-			code:      codes.Code(400001),
+			code:      codes.InvalidArgument,
 		},
 	}
 	for i := range testCases {

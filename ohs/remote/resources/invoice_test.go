@@ -89,7 +89,7 @@ func TestCreateInvoice(t *testing.T) {
 			},
 			patch:     func(mockID string) {},
 			expectErr: errors.BadRequest("invalid argument"),
-			code:      codes.Code(400001),
+			code:      codes.InvalidArgument,
 		},
 		{
 			name: "get uuid failed",
@@ -106,7 +106,7 @@ func TestCreateInvoice(t *testing.T) {
 				})
 			},
 			expectErr: errors.InternalServerError("get uuid failed"),
-			code:      codes.Code(500),
+			code:      codes.Internal,
 		},
 	}
 	for i := range testCases {
@@ -180,7 +180,7 @@ func TestGetInvoiceDetail(t *testing.T) {
 				Id: "test",
 			},
 			expectErr: errors.InvoiceNotFound("Invoice not found"),
-			code:      codes.Code(400004),
+			code:      codes.NotFound,
 		},
 	}
 	for i := range testCases {
@@ -255,7 +255,7 @@ func TestUpdateInvoice(t *testing.T) {
 				Id: "test",
 			},
 			expectErr: errors.InvoiceNotFound("Invoice not found"),
-			code:      codes.Code(400004),
+			code:      codes.NotFound,
 		},
 		{
 			name: "invalid argument",
@@ -264,7 +264,7 @@ func TestUpdateInvoice(t *testing.T) {
 				Status: 111,
 			},
 			expectErr: errors.BadRequest("invalid argument"),
-			code:      codes.Code(400001),
+			code:      codes.InvalidArgument,
 		},
 	}
 	for i := range testCases {
