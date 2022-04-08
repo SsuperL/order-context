@@ -1,9 +1,9 @@
 package aggregate
 
 import (
-	"order-context/common"
 	"order-context/domain/entity"
 	"order-context/domain/vo"
+	"order-context/utils/common"
 	"strings"
 )
 

@@ -1,6 +1,6 @@
 package entity
 
-import "order-context/common"
+import "order-context/utils/common"
 
 // Order 订单实体
 type Order struct {

@@ -6,7 +6,7 @@ package mock
 
 import (
 	pl "order-context/acl/adapters/pl"
-	common "order-context/common"
+	common "order-context/utils/common"
 	aggregate "order-context/domain/aggregate"
 	pl0 "order-context/ohs/local/pl"
 	reflect "reflect"

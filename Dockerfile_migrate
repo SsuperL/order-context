@@ -1,6 +1,6 @@
 FROM migrate/migrate 
 
-COPY migrations/* /migrations/
+COPY utils/migrations/* /migrations/
 
 ENTRYPOINT ["migrate","-path","/migrations"]
 

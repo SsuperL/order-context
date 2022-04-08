@@ -3,10 +3,10 @@ package services
 import (
 	"fmt"
 	"order-context/acl/adapters/pl"
-	"order-context/common"
 	"order-context/domain/aggregate"
-	"order-context/mock"
 	msg "order-context/ohs/local/pl"
+	"order-context/utils/common"
+	"order-context/utils/mock"
 	"testing"
 
 	"github.com/golang/mock/gomock"

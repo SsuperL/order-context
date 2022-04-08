@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"order-context/common"
 	"order-context/ohs/local/pl"
 	"order-context/ohs/remote"
 	"order-context/ohs/remote/resources"
+	"order-context/utils/common"
 	"strings"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"

@@ -3,7 +3,7 @@ package db
 import (
 	"log"
 	"order-context/acl/adapters/pl"
-	"order-context/common"
+	"order-context/utils/common"
 	"os"
 
 	"gorm.io/driver/postgres"

@@ -2,9 +2,9 @@ package repositories
 
 import (
 	"order-context/acl/adapters/pl"
-	"order-context/common"
 	"order-context/domain/aggregate"
 	ohs_pl "order-context/ohs/local/pl"
+	"order-context/utils/common"
 )
 
 // OrderRepository 订单资源库端口，定义操作领域资源的方法,依赖倒置

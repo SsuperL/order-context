@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"order-context/acl/adapters/pl"
 	"order-context/acl/ports/clients"
-	"order-context/common"
+	"order-context/utils/common"
 )
 
 // UUIDAdapter UUID适配器
