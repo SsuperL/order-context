@@ -33,13 +33,13 @@ test:
     - echo "test end -----------"
   coverage: '/total:\t+\(statements\)\t+(\d+\.\d+)%/'
   only:
-    - dev/101-201
+    - /^dev/.*$/
 
 build:
   tags:
     - kaniko-build
   stage: build
-  variables:
+  # variables:
   #  BUILD_ARGS: "--build-arg CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA} --build-arg DEPLOY_ENV='production-realihub'" # 前端项目取消本行注释(cms-web不需要取消)
   image: "${DEPLOY_IMAGE}"
   script:
@@ -58,7 +58,7 @@ build:
     # build migrate image for db migrations
     - /kaniko/executor --context "${CI_PROJECT_DIR}" ${BUILD_ARGS} --dockerfile "${CI_PROJECT_DIR}/Dockerfile_migrate" --destination "${PROJECT_IMAGE_MD5}_migrate"
   only:
-    - dev/101-201
+    - /^dev/.*$/
 
 deploy:
   tags:
@@ -70,7 +70,7 @@ deploy:
     - kubectl set image deployment/${CI_PROJECT_NAME} ${CI_PROJECT_NAME}=${PROJECT_IMAGE} -n ${PROJECT_NAMESPACE}
     - kubectl rollout status deployment/${CI_PROJECT_NAME} --timeout=3m -n ${PROJECT_NAMESPACE}|| (kubectl rollout undo deployment/${CI_PROJECT_NAME} -n ${PROJECT_NAMESPACE}  && exit 1) 
   only:
-    - dev/101-201
+    - /^dev/.*$/
  
 after_script:
   - sh "${SHELL_AFTER}"
