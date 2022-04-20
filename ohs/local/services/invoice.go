@@ -3,7 +3,6 @@ package services
 import (
 	"fmt"
 	dao "order-context/acl/adapters/repositories"
-	"order-context/acl/ports/repositories"
 	"order-context/domain/aggregate"
 	"order-context/domain/services"
 	"order-context/ohs/local/pl"
@@ -14,35 +13,18 @@ import (
 	"gorm.io/gorm"
 )
 
-// InvoiceAppService 发票本地服务
-type InvoiceAppService struct {
-	invoiceService *services.InvoiceService
-	invoiceDAO     repositories.InvoiceRepository
-}
-
-// NewInvoiceAppService 发票本地服务构造函数
-func NewInvoiceAppService(rootID, id string, options ...aggregate.InvoiceOptions) InvoiceAppService {
-	agInvoice := aggregate.NewInvoiceAggregate(rootID, id, options...)
-
-	return InvoiceAppService{
-		invoiceService: services.NewInvoiceService(agInvoice),
-		invoiceDAO:     dao.NewInvoiceAdapter(),
-	}
-}
-
-// CreateInvoice 创建发票
-func (a *InvoiceAppService) CreateInvoice(siteCode string) (*pl.CreateInvoiceResponse, error) {
-	//{
-	//创建服务
-	//获取订单的详情
-	//订单数据模型
-	order, err := OrderDAOAppService(a.invoiceService.InvoiceAg.RootID, siteCode)
+// CreateInvoiceAppService 创建发票
+func CreateInvoiceAppService(rootID, id, siteCode string, options ...aggregate.InvoiceOptions) (*pl.CreateInvoiceResponse, error) {
+	invoiceAggregate := aggregate.NewInvoiceAggregate(rootID, id, options...)
+	invoiceService := services.NewInvoiceService(invoiceAggregate)
+	order, err := OrderDAOAppService(rootID, siteCode)
 	if err != nil {
 		return &pl.CreateInvoiceResponse{}, err
 	}
-	a.invoiceService.InvoiceAg.Order.Price = order.Result.Price
 
-	invoiceID, err := a.invoiceService.CreateInvoice(siteCode)
+	invoiceService.InvoiceAg.Order.Price = order.Result.Price
+
+	invoiceID, err := invoiceService.CreateInvoice(siteCode)
 	if err != nil {
 		return &pl.CreateInvoiceResponse{}, err
 	}
@@ -52,9 +34,11 @@ func (a *InvoiceAppService) CreateInvoice(siteCode string) (*pl.CreateInvoiceRes
 	}, nil
 }
 
-// UpdateInvoice 更新发票
-func (a *InvoiceAppService) UpdateInvoice(siteCode string, params pl.UpdateInvoiceParams) (*pl.UpdateInvoiceResponse, error) {
-	err := a.invoiceService.UpdateInvoice(siteCode, params)
+// UpdateInvoiceAppService 更新发票
+func UpdateInvoiceAppService(id, siteCode string, params pl.UpdateInvoiceParams, options ...aggregate.InvoiceOptions) (*pl.UpdateInvoiceResponse, error) {
+	invoiceAggregate := aggregate.NewInvoiceAggregate("", id, options...)
+	invoiceService := services.NewInvoiceService(invoiceAggregate)
+	err := invoiceService.UpdateInvoice(siteCode, params)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return &pl.UpdateInvoiceResponse{Success: false}, errors.InvoiceNotFound("Order not found")
@@ -65,9 +49,10 @@ func (a *InvoiceAppService) UpdateInvoice(siteCode string, params pl.UpdateInvoi
 	return &pl.UpdateInvoiceResponse{Success: true}, nil
 }
 
-// GetInvoiceDetail 获取发票详情
-func (a *InvoiceAppService) GetInvoiceDetail(siteCode string) (*pl.GetInvoiceDetailResponse, error) {
-	invoice, err := a.invoiceDAO.GetInvoiceDetail(a.invoiceService.InvoiceAg.Invoice.ID, siteCode)
+// GetInvoiceDetailAppService 获取发票详情
+func GetInvoiceDetailAppService(id, siteCode string, options ...aggregate.InvoiceOptions) (*pl.GetInvoiceDetailResponse, error) {
+	invoiceDAO := dao.NewInvoiceAdapter()
+	invoice, err := invoiceDAO.GetInvoiceDetail(id, siteCode)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return &pl.GetInvoiceDetailResponse{}, errors.InvoiceNotFound("Invoice not found")
@@ -78,8 +63,9 @@ func (a *InvoiceAppService) GetInvoiceDetail(siteCode string) (*pl.GetInvoiceDet
 }
 
 // GetInvoiceList 获取发票列表
-func (a *InvoiceAppService) GetInvoiceList(params pl.ListInvoiceParams) (*pl.GetInvoiceListResponse, error) {
-	invoices, total, err := a.invoiceDAO.GetInvoiceList(params)
+func GetInvoiceListAppService(params pl.ListInvoiceParams) (*pl.GetInvoiceListResponse, error) {
+	invoiceDAO := dao.NewInvoiceAdapter()
+	invoices, total, err := invoiceDAO.GetInvoiceList(params)
 	if err != nil {
 		return &pl.GetInvoiceListResponse{}, errors.InternalServerError(fmt.Sprintf("get invoice list error: %v", err))
 	}

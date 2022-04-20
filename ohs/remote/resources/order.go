@@ -40,8 +40,7 @@ func (r *OrderResource) CreateOrder(ctx context.Context, req *pl.CreateOrderRequ
 		return nil, err
 	}
 
-	orderAppService := services.NewOrderAppService("", orderOption, spaceOption, packageOption)
-	response, err := orderAppService.CreateOrder(getSiteCode(ctx))
+	response, err := services.CreateOrderAppService("", getSiteCode(ctx), orderOption, spaceOption, packageOption)
 	if err != nil {
 		return &pl.CreateOrderResponse{}, err
 	}
@@ -61,9 +60,7 @@ func (r *OrderResource) UpdateOrder(ctx context.Context, req *pl.UpdateOrderRequ
 		return nil, err
 	}
 
-	orderAppService := services.NewOrderAppService(id)
-
-	res, err := orderAppService.UpdateOrder(getSiteCode(ctx), status)
+	res, err := services.UpdateOrderAppService(id, getSiteCode(ctx), status)
 	if err != nil {
 		return nil, err
 	}
@@ -79,9 +76,7 @@ func (r *OrderResource) GetOrderDetail(ctx context.Context, req *pl.GetOrderDeta
 		return nil, err
 	}
 
-	orderAppService := services.NewOrderAppService(id)
-
-	res, err := orderAppService.GetOrderDetail(getSiteCode(ctx))
+	res, err := services.GetOrderDetailAppService(id, getSiteCode(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +90,6 @@ func (r *OrderResource) GetOrderList(ctx context.Context, req *pl.GetOrderListRe
 		return nil, err
 	}
 
-	orderAppService := services.NewOrderAppService("")
-
 	status := common.StatusType(req.GetStatus())
 	if err := validateStatus(status); err != nil {
 		return nil, err
@@ -109,7 +102,7 @@ func (r *OrderResource) GetOrderList(ctx context.Context, req *pl.GetOrderListRe
 		Offset:  int(req.GetOffset()),
 	}
 
-	res, err := orderAppService.GetOrderList(params)
+	res, err := services.GetOrderListAppService(params)
 	if err != nil {
 		return nil, err
 	}

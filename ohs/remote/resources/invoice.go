@@ -37,9 +37,7 @@ func (i *InvoiceResource) CreateInvoice(ctx context.Context, req *pl.CreateInvoi
 		return nil, err
 	}
 
-	invoiceAppService := services.NewInvoiceAppService(rootID, "", invoiceOption, orderOption)
-
-	res, err := invoiceAppService.CreateInvoice(getSiteCode(ctx))
+	res, err := services.CreateInvoiceAppService(rootID, "", getSiteCode(ctx), invoiceOption, orderOption)
 	if err != nil {
 		return nil, err
 	}
@@ -60,12 +58,11 @@ func (i *InvoiceResource) UpdateInvoice(ctx context.Context, req *pl.UpdateInvoi
 	}
 
 	invoiceOption := aggregate.WithInvoiceOption(status, req.GetPath(), "")
-	invoiceAppService := services.NewInvoiceAppService("", id, invoiceOption)
 	params := pl.UpdateInvoiceParams{
 		Status: status,
 		Path:   req.GetPath(),
 	}
-	res, err := invoiceAppService.UpdateInvoice(getSiteCode(ctx), params)
+	res, err := services.UpdateInvoiceAppService(id, getSiteCode(ctx), params, invoiceOption)
 	if err != nil {
 		return nil, err
 	}
@@ -82,9 +79,7 @@ func (i *InvoiceResource) GetInvoiceDetail(ctx context.Context, req *pl.GetInvoi
 		return nil, err
 	}
 
-	invoiceAppService := services.NewInvoiceAppService("", id)
-
-	res, err := invoiceAppService.GetInvoiceDetail(getSiteCode(ctx))
+	res, err := services.GetInvoiceDetailAppService(id, getSiteCode(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -98,14 +93,12 @@ func (i *InvoiceResource) GetInvoiceList(ctx context.Context, req *pl.GetInvoice
 		return nil, err
 	}
 
-	invoiceAppService := services.NewInvoiceAppService("", "")
-
 	params := pl.ListInvoiceParams{
 		OrderID: req.GetOrderId(),
 		Limit:   int(req.GetLimit()),
 		Offset:  int(req.GetOffset()),
 	}
-	res, err := invoiceAppService.GetInvoiceList(params)
+	res, err := services.GetInvoiceListAppService(params)
 	if err != nil {
 		return nil, err
 	}
