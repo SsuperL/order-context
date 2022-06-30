@@ -163,30 +163,33 @@ func initLogger() {
 		logHandle := &serverLog{}
 		logHandle.logger = logrus.New()
 		logHandle.logger.SetFormatter(&logrus.JSONFormatter{})
-		logout := os.Getenv("LOGOUT")
-		if len(logout) > 0 {
-			logHandle.logger.SetOutput(os.Stdout)
-		} else {
-			// logDir = config.LogDir
-			// logName = config.LogName
-			// if logDir == "" {
-			// 	logDir = GetProjectAbPathByCaller()
-			// } else {
-			// 	err := os.MkdirAll(logDir, 0750)
-			// 	if err != nil {
-			// 		fmt.Println("mkdir err", err)
-			// 	}
-			// }
-			// if logName == "" {
-			// 	logName = "server.log"
-			// }
-			// logFileName := path.Join(logDir, logName)
-			// logFile, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0)
-			// if err != nil {
-			// 	fmt.Println("open log file err", err)
-			// }
-			// logHandle.logger.SetOutput(logFile)
-			// l = logHandle
-		}
+		// logout := os.Getenv("LOGOUT")
+		logHandle.logger.SetOutput(os.Stdout)
+		logHandle.logger.SetLevel(logrus.DebugLevel)
+		l = logHandle
+		// if len(logout) > 0 {
+		// 	logHandle.logger.SetOutput(os.Stdout)
+		// } else {
+		// logDir = config.LogDir
+		// logName = config.LogName
+		// if logDir == "" {
+		// 	logDir = GetProjectAbPathByCaller()
+		// } else {
+		// 	err := os.MkdirAll(logDir, 0750)
+		// 	if err != nil {
+		// 		fmt.Println("mkdir err", err)
+		// 	}
+		// }
+		// if logName == "" {
+		// 	logName = "server.log"
+		// }
+		// logFileName := path.Join(logDir, logName)
+		// logFile, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0)
+		// if err != nil {
+		// 	fmt.Println("open log file err", err)
+		// }
+		// logHandle.logger.SetOutput(logFile)
+		// l = logHandle
+		// }
 	})
 }

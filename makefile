@@ -11,10 +11,10 @@ migrate.create:
 	migrate create -ext sql -dir ./migrations -seq init_table_schema
 
 migrate.up:
-	migrate -path ./migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose up
+	migrate -path ./utils/migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose up
 
 migrate.down:
-	migrate -path ./migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose down
+	migrate -path ./utils/migrations -database "postgresql://postgres:driver@localhost:5432/order?sslmode=disable" -verbose down
 
 test:
 	go test -v -coverprofile cover.out ./...
