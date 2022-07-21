@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  CONFIG_PATH: /etc/config.yaml
+  DB_URI: postgresql://postgres:123@127.0.0.1:5432/order_context?sslmode=disable
+  config.yaml: |
+    db:
+      driver: postgres
+      dsn: host=127.0.0.1 user=postgres password=123 dbname=order port=5432 sslmode=disable TimeZone=Asia/Shanghai
+    port: 9080
+    uuidsrv:
+      host: http://uuid-service:8181/api/v1
+kind: ConfigMap
+metadata:
+  name: order-context
+  namespace: test

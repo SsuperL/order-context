@@ -23,6 +23,7 @@ import (
 // 	invoiceServer := resources.NewInvoiceResource()
 // 	pl.RegisterOrderServiceServer(s, orderServer)
 // 	pl.RegisterInvoiceServiceServer(s, invoiceServer)
+// 注册反射服务，用于对外暴露，使得grpCurl、Evans等工具可以使用
 // 	reflection.Register(s)
 
 // 	// c := make(chan os.Signal, 1)

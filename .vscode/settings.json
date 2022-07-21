@@ -1,6 +1,6 @@
 {
     "go.formatTool": "gofmt",
-    // "go.coverOnSave": true,
+    "go.coverOnSave": false,
     "go.coverageDecorator": {
         "type": "gutter",
         "coveredHighlightColor": "rgba(64,128,128,0.5)",
@@ -13,4 +13,16 @@
         "-count=1",
         "-v",
       ],
+    "[go]": { 
+    "editor.formatOnSave": true, 
+    "editor.codeActionsOnSave": { 
+        "source.organizeImports": true, 
+    },    // Optional: Disable snippets, as they conflict with completion ranking. 
+    "editor.snippetSuggestions": "none", 
+},"[go.mod]": { 
+    "editor.formatOnSave": true, 
+    "editor.codeActionsOnSave": { 
+        "source.organizeImports": true, 
+    },}, 
+    // "terminal.integrated.fontFamily": "Hack Nerd Font"
 }

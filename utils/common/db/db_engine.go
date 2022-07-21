@@ -11,12 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// const (
-// 	// dbDSN    = "host=127.0.0.1,user=postgres,password=realibox2021_postgres,dbname=order,port=54321,sslmode=disable,TimeZone=Asia/Shanghai"
-// 	dbDSN    = "host=127.0.0.1,user=postgres,password=driver,dbname=,port=54321,sslmode=disable,TimeZone=Asia/Shanghai"
-// 	dbDriver = "postgres"
-// )
-
 var (
 	db       *gorm.DB
 	dbDriver string

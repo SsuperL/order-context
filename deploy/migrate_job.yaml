@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    controller-uid: 084d36b9-ca38-4ba2-9551-ff9a42f115fa
+    job-name: migrate-job
+  name: migrate-job
+  namespace: test
+spec:
+  backoffLimit: 1
+  completions: 1
+  parallelism: 1
+  selector:
+    matchLabels:
+      controller-uid: 084d36b9-ca38-4ba2-9551-ff9a42f115fa
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        controller-uid: 084d36b9-ca38-4ba2-9551-ff9a42f115fa
+        job-name: migrate-job
+    spec:
+      containers:
+      - args:
+        - -database
+        - $(DB_URI)
+        - -verbose
+        - up
+        env:
+        - name: DB_URI
+          valueFrom:
+            configMapKeyRef:
+              key: DB_URI
+              name: order-context
+        image: image_url
+        imagePullPolicy: IfNotPresent
+        name: migrate
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: test-secret
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30

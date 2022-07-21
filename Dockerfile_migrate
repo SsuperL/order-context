@@ -1,7 +1,6 @@
+# 构建数据库迁移镜像
 FROM migrate/migrate 
 
 COPY utils/migrations/* /migrations/
 
 ENTRYPOINT ["migrate","-path","/migrations"]
-
-# CMD ["migrate","-path","/migrations" "-database","localhost","-verbose","up"]
